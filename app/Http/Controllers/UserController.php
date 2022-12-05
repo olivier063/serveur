@@ -17,6 +17,10 @@ class UserController extends Controller
         return response()->json(User::all());
     }
 
+
+    public function me(Request $request){
+        return response()->json($request->user());
+    }
     /**
      * Show the form for creating a new resource.
      *
