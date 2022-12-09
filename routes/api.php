@@ -6,6 +6,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AnnoncesController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -56,7 +57,13 @@ Route::controller(AuthenticationController::class)->group(function(){
     route::post('create-account', 'createAccount')->name('authentication.create');
 });
 
-
 Route::controller(LoginController::class)->group(function(){
     route::post('Login', 'login')->name('login.login');
 });
+
+
+//Pas besoin de Route ou de LogoutController dans le back, tout se gere dans le front avec le localStorage
+// Route::Controller(LogoutController::class)->group(function(){
+//     route::post('Logout', 'logout')->name('logout.logout');
+// });
+

@@ -14,14 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('annonces', function (Blueprint $table) {
+
+            // le nullable rend le champs facultatif
             $table->id();
             $table->timestamps();
-            $table->string('auteur');
+            $table->string('auteur')->nullable();
             $table->string('description');
             $table->float('prix')->default(10)->nullable();
             $table->string('titre');
-            $table->integer('nombre de like');
-            $table->boolean('vendu/non vendu')->default(1);
+            $table->integer('nombre de like')->default(0)->nullable();
+            $table->boolean('vendu/non vendu')->default(0)->nullable();
         });
     }
 

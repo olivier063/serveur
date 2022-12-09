@@ -30,10 +30,10 @@ class AnnoncesController extends Controller
 
         $request->validate([
 
-            'description' => 'required|unique:annonces',
-            'titre' => 'required|unique:annnonces',
-            'auteur' => 'required|unique:annonces',
-            'prix' => 'required|unique:annonces'
+            'description' => 'required',
+            'titre' =>  'required',
+            // 'auteur' =>  'required',
+            'prix' =>  'required'
 
             
         ]);
