@@ -25,15 +25,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::controller(AnnoncesController::class)->group(function() {
+Route::controller(AnnoncesController::class)->group(function () {
     route::get('annonces', 'index');
-    route::get('annonces/{annonce}', 'show');
-    route::Post('annonces','store');
-    route::put('annonces/{id}', 'update');
-    route::delete('annonces/{id}', 'destroy');
 });
 
-Route::controller(MessageController::class)->group(function() {
+Route::controller(MessageController::class)->group(function () {
     route::get('message', 'index');
     route::get('message/{message}', 'show');
     route::post('message', 'store');
@@ -41,8 +37,8 @@ Route::controller(MessageController::class)->group(function() {
     route::delete('message/{id}', 'destroy');
 });
 
-Route::middleware(["auth:sanctum"])->group(function(){
-    Route::controller(UserController::class)->group(function() {
+Route::middleware(["auth:sanctum"])->group(function () {
+    Route::controller(UserController::class)->group(function () {
         route::get('user', 'index')->name('user.index');
         route::get('me', 'me')->name('user.me');
         route::get('user/{user}', 'show')->name('user.show');
@@ -50,14 +46,25 @@ Route::middleware(["auth:sanctum"])->group(function(){
         route::put('user/{id}', 'update')->name('user.update');
         route::delete('user/{id}', 'destroy')->name('user.destroy');
     });
+    Route::controller(AnnoncesController::class)->group(function () {
+
+        route::get('annonces/{annonce}', 'show');
+
+        //pour montrer que les annonces de l'utilisateur :
+        route::get('annonces/me', 'showMyAnnonce');
+
+        route::Post('annonces', 'store');
+        route::put('annonces/{id}', 'update');
+        route::delete('annonces/{id}', 'destroy');
+    });
 });
 
 
-Route::controller(AuthenticationController::class)->group(function(){
+Route::controller(AuthenticationController::class)->group(function () {
     route::post('create-account', 'createAccount')->name('authentication.create');
 });
 
-Route::controller(LoginController::class)->group(function(){
+Route::controller(LoginController::class)->group(function () {
     route::post('Login', 'login')->name('login.login');
 });
 
@@ -66,4 +73,3 @@ Route::controller(LoginController::class)->group(function(){
 // Route::Controller(LogoutController::class)->group(function(){
 //     route::post('Logout', 'logout')->name('logout.logout');
 // });
-

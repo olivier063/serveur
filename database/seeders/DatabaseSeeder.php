@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-
+        \App\Models\User::factory(10)->create();
         \App\Models\Message::factory(10)->create(); //ici on cree 10 messages aleatoires
         \App\Models\Message::factory()->create([
             'auteur' => 'Polo walter',
@@ -31,12 +31,13 @@ class DatabaseSeeder extends Seeder
        \App\Models\Annonces::factory(10)->create(); //ici on cree 10 annonces aleatoires
         \App\Models\Annonces::factory()->create([
             'auteur' => 'Polo',
+            'user_id' => 1,
             'description' => 'ceci est un contenu d annonce',
             'prix' => 3.5
         ], 
        );
 
-       \App\Models\User::factory(10)->create();
+      
 
 
     }

@@ -17,6 +17,10 @@ return new class extends Migration
 
             // le nullable rend le champs facultatif
             $table->id();
+
+            $table->foreignId('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            
             $table->timestamps();
             $table->string('auteur')->nullable();
             $table->string('description');
@@ -24,6 +28,7 @@ return new class extends Migration
             $table->string('titre');
             $table->integer('nombre de like')->default(0)->nullable();
             $table->boolean('vendu/non vendu')->default(0)->nullable();
+
         });
     }
 

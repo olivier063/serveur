@@ -39,17 +39,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            
+        $request->validate([  
             'name' => 'required|unique:users',
             'email' => 'required|unique:users',
-            'password' => 'required|unique:users'
-
-            
+            'password' => 'required|unique:users'  
         ]);
 
         User::create($request->all());
-
         return response(
             User::query()->orderBy('id', 'desc')->first()
         );

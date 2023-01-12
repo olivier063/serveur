@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Annonces;
+use Exception;
 use Illuminate\Http\Request;
 
 class AnnoncesController extends Controller
@@ -14,8 +15,13 @@ class AnnoncesController extends Controller
      */
     public function index()
     {
+
+        //Pour ordonner les annonces par nombre de likes (changé pour le created_at)....
+        $annonces = Annonces::orderBy('nombre de like', 'desc')->get();
+        return response()->json($annonces);
+
         //permet d'afficher toutes les annonces
-        return response()->json(Annonces::all());
+        // return response()->json(Annonces::all());
     }
 
     /**
@@ -26,24 +32,31 @@ class AnnoncesController extends Controller
      */
     public function store(Request $request)
     {
-        //permet de creer les annonces
+        //permet de creer les annonces       
+        try {
+            $request->validate([
 
-        $request->validate([
+                'description' => 'required',
+                'titre' =>  'required',
+                'prix' =>  'required'
+            ]);
 
-            'description' => 'required',
-            'titre' =>  'required',
-            // 'auteur' =>  'required',
-            'prix' =>  'required'
+            $data = $request->all();
+            $data['user_id'] = $request->user()->id;
+            Annonces::create($data);
+        } catch (Exception $e) {
+            return response()->json([
+                "request" => $request,
+                "message" => $e->getMessage()
+            ], 421);
+        }
 
-            
-        ]);
 
-        Annonces::create($request->all());
-
-        return response(
+        return response()->json(
             Annonces::query()->orderBy('id', 'desc')->first()
         );
     }
+
 
     /**
      * Display the specified resource.
@@ -51,8 +64,21 @@ class AnnoncesController extends Controller
      * @param  \App\Models\Annonces  $annonces
      * @return \Illuminate\Http\Response
      */
+
+
+    //pour montrer que les annonces de l'utilisateur
+    public function showMyAnnonce(Request $request)
+    {
+        $user = $request->user();
+        Annonces::where('user_id', '=', $user->id)->firstOrFail();
+    }
+
+
+
+
     public function show(Annonces $annonce)
     {
+
         return response()->json($annonce);
     }
 
@@ -71,11 +97,12 @@ class AnnoncesController extends Controller
         //Prends cette question d'un ID particulier et mets le a jour d'apres le formulaire ($request->all()) envoye via postman
         $updatedAnnonces->update($request->all());
 
-        return response(['message' => 'Annonce updated',
-                        'description requetee ' => $request['description'],
-                        'auteur requetee ' => $request['auteur'],
-                        'MAJ' => $updatedAnnonces,
-                        ]);
+        return response([
+            'message' => 'Annonce updated',
+            'description requetee ' => $request['description'],
+            'auteur requetee ' => $request['auteur'],
+            'MAJ' => $updatedAnnonces,
+        ]);
     }
 
     /**
