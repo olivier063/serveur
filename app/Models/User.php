@@ -41,4 +41,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    // On lie un utilsateur aux annonces de celui-ci
+    function myAnnonces(){
+        return $this->hasMany(Annonces::class);
+    }
 }

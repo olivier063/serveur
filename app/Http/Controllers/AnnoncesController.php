@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Annonces;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -13,16 +14,34 @@ class AnnoncesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function index()
+    // {
+
+    //     //Pour ordonner les annonces par nombre de likes (changé pour le created_at)....
+    //     $annonces = Annonces::orderBy('nombre de like', 'desc')->get();
+    //     return response()->json($annonces);
+
+    //     //permet d'afficher toutes les annonces
+    //     // return response()->json(Annonces::all());
+    // }
+
     public function index()
     {
-
-        //Pour ordonner les annonces par nombre de likes (changé pour le created_at)....
-        $annonces = Annonces::orderBy('nombre de like', 'desc')->get();
+        $annonces = Annonces::where('nombre de like', '>=', 50)
+            ->orderBy('created_at', 'desc')
+            ->get();
         return response()->json($annonces);
-
-        //permet d'afficher toutes les annonces
-        // return response()->json(Annonces::all());
     }
+
+    public function index2()
+    {
+        $annonces = Annonces::where('nombre de like', '<', 50)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return response()->json($annonces);
+    }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -51,7 +70,6 @@ class AnnoncesController extends Controller
             ], 421);
         }
 
-
         return response()->json(
             Annonces::query()->orderBy('id', 'desc')->first()
         );
@@ -66,19 +84,17 @@ class AnnoncesController extends Controller
      */
 
 
-    //pour montrer que les annonces de l'utilisateur
-    public function showMyAnnonce(Request $request)
+    //pour montrer que les annonces de l'utilisateur, penser à faire l'import du User pour le mettre dans les parametres de la fonction showMyAnnonce
+    public function showMyAnnonce(Request $request, User $user)
     {
-        $user = $request->user();
-        Annonces::where('user_id', '=', $user->id)->firstOrFail();
+        $annonces = $user->myAnnonces;
+        return response()->json($annonces);
     }
-
 
 
 
     public function show(Annonces $annonce)
     {
-
         return response()->json($annonce);
     }
 
@@ -91,19 +107,49 @@ class AnnoncesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Ma variable est un objet de type Question : il contient l'id, la description et l'image
+        //Ma variable est un objet de type annonce : il contient l'id, la description et l'image
         $updatedAnnonces = Annonces::findOrFail($id);
 
-        //Prends cette question d'un ID particulier et mets le a jour d'apres le formulaire ($request->all()) envoye via postman
+        //Prends cette annonce d'un ID particulier et mets le a jour d'apres le formulaire ($request->all()) envoye via postman
         $updatedAnnonces->update($request->all());
-
         return response([
             'message' => 'Annonce updated',
             'description requetee ' => $request['description'],
-            'auteur requetee ' => $request['auteur'],
+            'nombre de like requete ' => $request['nombre de like'],
+            'prix requete ' => $request['prix'],
+            'titre requete' => $request['titre'],
             'MAJ' => $updatedAnnonces,
         ]);
     }
+
+
+    // public function up(Request $request, $id)
+    // {
+    //     //permet de creer les annonces       
+    //     try {
+    //         $request->validate([
+
+    //             'description' => 'required',
+    //             'titre' =>  'required',
+    //             'prix' =>  'required'
+    //         ]);
+
+    //         $data = $request->all();
+    //         $data['user_id'] = $request->user()->id;
+    //         Annonces::create($data);
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             "request" => $request,
+    //             "message" => $e->getMessage()
+    //         ], 421);
+    //     }
+
+
+    //     return response()->json(
+    //         Annonces::query()->orderBy('id', 'desc')->first()
+    //     );
+    // }
+
 
     /**
      * Remove the specified resource from storage.

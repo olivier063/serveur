@@ -27,6 +27,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::controller(AnnoncesController::class)->group(function () {
     route::get('annonces', 'index');
+    route::get('annonces2', 'index2');
+    route::get('annonces/{annonce}', 'show');
+    route::put('annonces/{id}', 'update');
 });
 
 Route::controller(MessageController::class)->group(function () {
@@ -47,14 +50,9 @@ Route::middleware(["auth:sanctum"])->group(function () {
         route::delete('user/{id}', 'destroy')->name('user.destroy');
     });
     Route::controller(AnnoncesController::class)->group(function () {
-
-        route::get('annonces/{annonce}', 'show');
-
         //pour montrer que les annonces de l'utilisateur :
-        route::get('annonces/me', 'showMyAnnonce');
-
+        route::get('myannonces/{user}', 'showMyAnnonce');
         route::Post('annonces', 'store');
-        route::put('annonces/{id}', 'update');
         route::delete('annonces/{id}', 'destroy');
     });
 });

@@ -17,10 +17,8 @@ return new class extends Migration
 
             // le nullable rend le champs facultatif
             $table->id();
-
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            
             $table->timestamps();
             $table->string('auteur')->nullable();
             $table->string('description');
