@@ -107,9 +107,16 @@ class AnnoncesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // pour la secu, on verifie que l'utilisateur soit bien connecte
+        $user = $request->user();
         //Ma variable est un objet de type annonce : il contient l'id, la description et l'image
         $updatedAnnonces = Annonces::findOrFail($id);
-
+        if (is_null($updatedAnnonces)){
+            return response()->json(['message' => "Annonce non existante"], 404);
+        } 
+        if ($updatedAnnonces->user_id !== $user->id ) {
+            return response()->json(['message' => "L' utilisateur ne possede pas les droits"], 403);
+        }
         //Prends cette annonce d'un ID particulier et mets le a jour d'apres le formulaire ($request->all()) envoye via postman
         $updatedAnnonces->update($request->all());
         return response([
@@ -157,9 +164,21 @@ class AnnoncesController extends Controller
      * @param  \App\Models\Annonces  $annonces
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        Annonces::findOrFail($id)->delete();
+    
+        $user = $request->user();
+        //Ma variable est un objet de type annonce : il contient l'id, la description et l'image
+        $updatedAnnonces = Annonces::findOrFail($id);
+        if (is_null($updatedAnnonces)){
+            return response()->json(['message' => "Annonce non existante"], 404);
+        } 
+        if ($updatedAnnonces->user_id !== $user->id ) {
+            return response()->json(['message' => "L' utilisateur ne possede pas les droits"], 403);
+        }
+
+    $updatedAnnonces->delete();
+
         return response()->json(
             "annonce {$id} supprimee"
         );

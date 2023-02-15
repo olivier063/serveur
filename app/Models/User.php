@@ -47,4 +47,8 @@ class User extends Authenticatable
     function myAnnonces(){
         return $this->hasMany(Annonces::class);
     }
+
+    function myLikeAnnonce(){
+        return $this->hasMany(LikeAnnonce::class);
+    }
 }

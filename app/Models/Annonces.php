@@ -18,4 +18,8 @@ class Annonces extends Model
     function user(){
         return $this->belongsTo(User::class);
     }
+
+    function myLikeAnnonce(){
+        return $this->hasMany(LikeAnnonce::class);
+    }
 }

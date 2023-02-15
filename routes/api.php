@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AnnoncesController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\LikeAnnonceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\UserController;
@@ -29,16 +30,9 @@ Route::controller(AnnoncesController::class)->group(function () {
     route::get('annonces', 'index');
     route::get('annonces2', 'index2');
     route::get('annonces/{annonce}', 'show');
-    route::put('annonces/{id}', 'update');
+    // route::put('annonces/{id}', 'update');
 });
 
-Route::controller(MessageController::class)->group(function () {
-    route::get('message', 'index');
-    route::get('message/{message}', 'show');
-    route::post('message', 'store');
-    route::put('message/{id}', 'update');
-    route::delete('message/{id}', 'destroy');
-});
 
 Route::middleware(["auth:sanctum"])->group(function () {
     Route::controller(UserController::class)->group(function () {
@@ -53,7 +47,19 @@ Route::middleware(["auth:sanctum"])->group(function () {
         //pour montrer que les annonces de l'utilisateur :
         route::get('myannonces/{user}', 'showMyAnnonce');
         route::Post('annonces', 'store');
-        route::delete('annonces/{id}', 'destroy');
+        route::delete('annonces/{id}', 'destroy');       
+        route::put('annonces/{id}', 'update');
+    });
+    Route::controller(MessageController::class)->group(function () {
+        route::get('message', 'index');
+        route::get('message/{message}', 'show');
+        route::post('message', 'store');
+        route::put('message/{id}', 'update');
+        route::delete('message/{id}', 'destroy');
+    });
+    //dans les accolades c'est l'id
+    Route::controller(LikeAnnonceController::class)->group(function () {
+        route::post('like-annonce/{user}/annonce/{annonce}', 'store');
     });
 });
 
