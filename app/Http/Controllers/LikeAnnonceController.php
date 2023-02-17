@@ -38,6 +38,8 @@ class LikeAnnonceController extends Controller
        // si like annonce existe on fait un delete comme dans annonce controller et on renvoi a nouveau  a partir de la ligne 53
        if (!is_null($likeAnnonce)){
 
+        $likeAnnonce->delete();
+        
        } else {
         try {
             $data = $request->all();

@@ -11,7 +11,7 @@ class Annonces extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'description', 'titre', 'auteur', 'prix', 'nombre de like'];
+    protected $fillable = ['user_id', 'description', 'titre', 'auteur', 'prix', 'nombre de like', 'image'];
 
 
     //permet de lier les annonces à 1 user

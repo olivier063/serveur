@@ -57,7 +57,7 @@ Route::middleware(["auth:sanctum"])->group(function () {
         route::put('message/{id}', 'update');
         route::delete('message/{id}', 'destroy');
     });
-    //dans les accolades c'est l'id
+    //dans les accolades c'est l'id 
     Route::controller(LikeAnnonceController::class)->group(function () {
         route::post('like-annonce/{user}/annonce/{annonce}', 'store');
     });
