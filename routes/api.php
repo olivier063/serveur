@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\LikeAnnonceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\MessagingController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -59,8 +60,19 @@ Route::middleware(["auth:sanctum"])->group(function () {
     });
     //dans les accolades c'est l'id 
     Route::controller(LikeAnnonceController::class)->group(function () {
-        route::post('like-annonce/{user}/annonce/{annonce}', 'store');
+        route::post('like-annonce/{user}/annonce/{annonce}', 'store'); // permet de liker une annonce
+        route::get('like-annonce/{user}', 'showAllUserLike'); // permet de montrer tous les likes d'un user
     });
+    Route::controller(MessagingController::class)->group(function () {
+        route::get('messaging/annonce/{annonce}', 'index');// affiche tous les messages d'une annonce
+        route::get('messaging/{user}', 'showAllMyMessage'); //affiche tous les messages de l'utilisateur
+        route::post('messaging/{user}/annonce/{annonce}', 'store'); //post les messages
+        // route::put('message/{id}', 'update');
+        route::delete('messaging/{id}', 'destroy');
+    });
+
+
+
 });
 
 
@@ -69,7 +81,7 @@ Route::controller(AuthenticationController::class)->group(function () {
 });
 
 Route::controller(LoginController::class)->group(function () {
-    route::post('Login', 'login')->name('login.login');
+    route::post('login', 'login')->name('login.login');
 });
 
 

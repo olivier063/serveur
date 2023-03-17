@@ -22,4 +22,10 @@ class Annonces extends Model
     function myLikeAnnonce(){
         return $this->hasMany(LikeAnnonce::class);
     }
+
+    function myMessaging(){
+        return $this->hasMany(Messaging::class);
+    }
 }
+
+//belongs to categorie... a mettre pour les categories

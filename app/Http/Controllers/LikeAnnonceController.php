@@ -19,6 +19,12 @@ class LikeAnnonceController extends Controller
         //
     }
 
+    public function showAllUserLike(Request $request, $user)
+    {
+        $likeAnnonce = LikeAnnonce::where('user_id', $user)->orderBy('created_at', 'desc')->get();
+            return response()->json($likeAnnonce);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -35,6 +41,7 @@ class LikeAnnonceController extends Controller
          //securite
         $likeAnnonce =  LikeAnnonce::where('annonce_id', $annonce)->where('user_id', $user)
         ->first();
+        // var_dump($likeAnnonce);exit;
        // si like annonce existe on fait un delete comme dans annonce controller et on renvoi a nouveau  a partir de la ligne 53
        if (!is_null($likeAnnonce)){
 
@@ -42,8 +49,6 @@ class LikeAnnonceController extends Controller
         
        } else {
         try {
-            $data = $request->all();
-            $data['user_id'] = $request->user()->id;
             LikeAnnonce::create([
                 "user_id"=>$user,
                 "annonce_id"=>$annonce
@@ -55,11 +60,12 @@ class LikeAnnonceController extends Controller
             ], 421);
         }
        }
+       $count=  LikeAnnonce::where('annonce_id', $annonce)
+       ->select(DB::raw('count(id) as total_like'))
+       ->groupBy('annonce_id')
+       ->first();
         return response()->json(
-            LikeAnnonce::where('annonce_id', $annonce)
-            ->select(DB::raw('sum(id) as total_like'))
-            ->groupBy('annonce_id')
-            ->first()
+          $count ?? ['total_like' => 0]
         );
     }
 

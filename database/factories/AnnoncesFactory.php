@@ -19,13 +19,13 @@ class AnnoncesFactory extends Factory
 
 
         return [
-            'description'=> $this->faker->sentence(5, true),
-             'user_id'=>rand(1, 10),
+            'description'=> $this->faker->sentence(10, true),
+            'user_id'=>rand(1, 10),
             'titre'=> $this->faker->sentence(5, true),
             'auteur'=> $this->faker->sentence(5, true),
             'prix'=> $this->faker->randomFloat(3, 3, 10),
-            'nombre de like'=> $this->faker->randomNumber(5)
-            
+            'nombre de like'=> $this->faker->randomNumber(2),
+            'image'=> $this->faker->sentence(5, true),            
             
         ];
     }
