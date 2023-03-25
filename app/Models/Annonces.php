@@ -20,7 +20,7 @@ class Annonces extends Model
     }
 
     function myLikeAnnonce(){
-        return $this->hasMany(LikeAnnonce::class);
+        return $this->hasMany(LikeAnnonce::class, 'annonce_id');
     }
 
     function myMessaging(){

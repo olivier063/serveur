@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Annonces;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class AnnoncesController extends Controller
@@ -27,7 +28,16 @@ class AnnoncesController extends Controller
 
     public function index()
     {
-        $annonces = Annonces::where('nombre de like', '>=', 50)
+        //Sous requete qui recupere dans les likeAnnonce tous ceux qui ont l'user id du current utilisateur
+        $annonces = Annonces::whereHas("myLikeAnnonce", function(Builder $query){
+            $query->where("user_id", "=", 16);
+        })
+        ->get();
+        return response()->json($annonces);
+        
+
+        // le withCount permet de jointer la fonction myLikeAnnonce du model-Annonce A la table Annonce
+        $annonces = Annonces::withCount("myLikeAnnonce")->having("my_like_annonce_count", '>=', 1)
             ->orderBy('created_at', 'desc')
             ->get();
         return response()->json($annonces);
@@ -95,8 +105,11 @@ class AnnoncesController extends Controller
 
 
     public function show(Annonces $annonce)
+    //le withCount permet de jointer la fonction myLikeAnnonce du model-Annonce (donc d'une annonce) avec la table likeAnnonce.
+    //si je Get dans postman, je peux voir la nouvelle ligne myLikeAnnonceCount.
     {
-        return response()->json($annonce);
+        $count = Annonces::withCount("myLikeAnnonce")->findOrFail($annonce->id);
+        return response()->json($count);
     }
 
     /**
