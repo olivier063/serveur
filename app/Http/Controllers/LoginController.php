@@ -16,9 +16,9 @@ class LoginController extends Controller
         if(Auth::attempt($loginDetails)){
             $user = User::where('email', $loginDetails['email']) -> first();
             // si jamais la Bd ne fonctionne plus, on gere l'erreure suivante.
-        if($user === null){
-            return response()->json(['token' => null], 404);
-        }
+            if($user === null){
+                return response()->json(['token' => null], 404);
+            }
             return response()->json([
                 'token' => $user->createToken('tokens')->plainTextToken
             ]);

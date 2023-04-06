@@ -26,6 +26,10 @@ class Annonces extends Model
     function myMessaging(){
         return $this->hasMany(Messaging::class);
     }
+
+    function myImage(){
+        return $this->hasOne(Image::class);
+    }
 }
 
 //belongs to categorie... a mettre pour les categories

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Annonces;
+use App\Models\Image;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,15 +30,18 @@ class AnnoncesController extends Controller
     public function index()
     {
         //Sous requete qui recupere dans les likeAnnonce tous ceux qui ont l'user id du current utilisateur
-        $annonces = Annonces::whereHas("myLikeAnnonce", function(Builder $query){
-            $query->where("user_id", "=", 16);
-        })
-        ->get();
-        return response()->json($annonces);
+
+        // MES LIKES
+
+        // $annonces = Annonces::whereHas("myLikeAnnonce", function(Builder $query){
+        //     $query->where("user_id", "=", 16);
+        // })
+        // ->get();
+        // return response()->json($annonces);
         
 
         // le withCount permet de jointer la fonction myLikeAnnonce du model-Annonce A la table Annonce
-        $annonces = Annonces::withCount("myLikeAnnonce")->having("my_like_annonce_count", '>=', 1)
+        $annonces = Annonces::withCount("myLikeAnnonce")->having("my_like_annonce_count", '>=', 20)
             ->orderBy('created_at', 'desc')
             ->get();
         return response()->json($annonces);
@@ -45,7 +49,7 @@ class AnnoncesController extends Controller
 
     public function index2()
     {
-        $annonces = Annonces::where('nombre de like', '<', 50)
+        $annonces = Annonces::withCount("myLikeAnnonce")->having("my_like_annonce_count", '<=', 20)
             ->orderBy('created_at', 'desc')
             ->get();
         return response()->json($annonces);
@@ -68,12 +72,18 @@ class AnnoncesController extends Controller
                 'description' => 'required',
                 'titre' =>  'required',
                 'prix' =>  'required',
-                'image' => 'required'
+                'image' => 'required',
+                'imageBase64' => 'required',
             ]);
 
             $data = $request->all();
             $data['user_id'] = $request->user()->id;
-            Annonces::create($data);
+ 
+           $id = Annonces::create($data)->id;
+        //    var_dump($id);
+        //    exit;
+           Image::create(['annonce_id'=>$id, 'content'=>$request->get('imageBase64')]);
+
         } catch (Exception $e) {
             return response()->json([
                 "request" => $request,
@@ -85,6 +95,7 @@ class AnnoncesController extends Controller
             Annonces::query()->orderBy('id', 'desc')->first()
         );
     }
+
 
 
     /**
@@ -196,4 +207,7 @@ class AnnoncesController extends Controller
             "annonce {$id} supprimee"
         );
     }
+
+
+
 }

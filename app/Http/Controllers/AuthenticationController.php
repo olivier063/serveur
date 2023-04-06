@@ -21,18 +21,14 @@ class AuthenticationController extends Controller
             return response()->json([
                 "request"=>$request,
                 "message"=>$e->getMessage()
-            ],421);
-            
-            
+            ],421);    
         }
        
-
         $user = User::create([
             'name' => $attr['name'],
             'password' => bcrypt($attr['password']),
             'email' => $attr['email']
         ]);
-
         
         return response()->json([
             'token' => $user->createToken('tokens')->plainTextToken
