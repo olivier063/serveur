@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('annonce_id');
             $table->foreign('annonce_id')->references('id')->on('annonces');
             $table->longText('content');
+            
         });
     }
 

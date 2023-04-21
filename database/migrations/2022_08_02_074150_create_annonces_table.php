@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('description');
             $table->float('prix')->default(10)->nullable();
             $table->string('titre');
+            // a enlever 'image'
             $table->string('image');
             $table->integer('nombre de like')->default(0)->nullable();
             $table->boolean('vendu/non vendu')->default(0)->nullable();

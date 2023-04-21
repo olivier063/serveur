@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::controller(AnnoncesController::class)->group(function () {
+    route::get('annoncesAll', 'indexAll');
     route::get('annonces', 'index');
     route::get('annonces2', 'index2');
     route::get('annonces/{annonce}', 'show');

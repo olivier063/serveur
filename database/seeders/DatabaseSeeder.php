@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         \App\Models\User::factory(10)->create();
+        // \App\Models\LikeAnnonce::factory(10)->create();
         \App\Models\Message::factory(10)->create(); //ici on cree 10 messages aleatoires
         \App\Models\Message::factory()->create([
             'auteur' => 'Polo walter',

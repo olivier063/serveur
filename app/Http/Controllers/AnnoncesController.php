@@ -27,11 +27,15 @@ class AnnoncesController extends Controller
     //     // return response()->json(Annonces::all());
     // }
 
+    public function indexAll(){
+        return response()->json(Annonces::all());
+    }
+
     public function index()
     {
         //Sous requete qui recupere dans les likeAnnonce tous ceux qui ont l'user id du current utilisateur
 
-        // MES LIKES
+        // MES LIKES..............................
 
         // $annonces = Annonces::whereHas("myLikeAnnonce", function(Builder $query){
         //     $query->where("user_id", "=", 16);
@@ -41,7 +45,7 @@ class AnnoncesController extends Controller
         
 
         // le withCount permet de jointer la fonction myLikeAnnonce du model-Annonce A la table Annonce
-        $annonces = Annonces::withCount("myLikeAnnonce")->having("my_like_annonce_count", '>=', 20)
+        $annonces = Annonces::withCount("myLikeAnnonce")->having("my_like_annonce_count", '>=', 1)
             ->orderBy('created_at', 'desc')
             ->get();
         return response()->json($annonces);
@@ -49,7 +53,7 @@ class AnnoncesController extends Controller
 
     public function index2()
     {
-        $annonces = Annonces::withCount("myLikeAnnonce")->having("my_like_annonce_count", '<=', 20)
+        $annonces = Annonces::withCount("myLikeAnnonce")->having("my_like_annonce_count", '<', 1)
             ->orderBy('created_at', 'desc')
             ->get();
         return response()->json($annonces);
@@ -80,8 +84,6 @@ class AnnoncesController extends Controller
             $data['user_id'] = $request->user()->id;
  
            $id = Annonces::create($data)->id;
-        //    var_dump($id);
-        //    exit;
            Image::create(['annonce_id'=>$id, 'content'=>$request->get('imageBase64')]);
 
         } catch (Exception $e) {
@@ -134,7 +136,7 @@ class AnnoncesController extends Controller
     {
         // pour la secu, on verifie que l'utilisateur soit bien connecte
         $user = $request->user();
-        //Ma variable est un objet de type annonce : il contient l'id, la description et l'image
+
         $updatedAnnonces = Annonces::findOrFail($id);
         if (is_null($updatedAnnonces)) {
             return response()->json(['message' => "Annonce non existante"], 404);
@@ -142,7 +144,7 @@ class AnnoncesController extends Controller
         if ($updatedAnnonces->user_id !== $user->id) {
             return response()->json(['message' => "L' utilisateur ne possede pas les droits"], 403);
         }
-        //Prends cette annonce d'un ID particulier et mets le a jour d'apres le formulaire ($request->all()) envoye via postman
+
         $updatedAnnonces->update($request->all());
         return response([
             'message' => 'Annonce updated',

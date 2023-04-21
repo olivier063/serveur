@@ -84,8 +84,6 @@ class UserController extends Controller
     {
         
         $updatedUser = User::findOrFail($id);
-
-        
         $updatedUser->update($request->all());
 
         return response(['message' => 'Annonce updated',
