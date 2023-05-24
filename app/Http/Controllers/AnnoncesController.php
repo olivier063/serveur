@@ -46,6 +46,7 @@ class AnnoncesController extends Controller
 
         // le withCount permet de jointer la fonction myLikeAnnonce du model-Annonce A la table Annonce
         $annonces = Annonces::withCount("myLikeAnnonce")->having("my_like_annonce_count", '>=', 1)
+            ->with('myImage')
             ->orderBy('created_at', 'desc')
             ->get();
         return response()->json($annonces);
@@ -54,6 +55,7 @@ class AnnoncesController extends Controller
     public function index2()
     {
         $annonces = Annonces::withCount("myLikeAnnonce")->having("my_like_annonce_count", '<', 1)
+            ->with('myImage')
             ->orderBy('created_at', 'desc')
             ->get();
         return response()->json($annonces);

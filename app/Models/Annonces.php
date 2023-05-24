@@ -28,7 +28,7 @@ class Annonces extends Model
     }
 
     function myImage(){
-        return $this->hasOne(Image::class);
+        return $this->hasOne(Image::class, 'annonce_id');
     }
 }
 

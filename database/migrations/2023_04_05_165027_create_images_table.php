@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('annonce_id');
-            $table->foreign('annonce_id')->references('id')->on('annonces');
+            $table->foreign('annonce_id')->references('id')->on('annonces')->onDelete('cascade');
             $table->longText('content');
             
         });
