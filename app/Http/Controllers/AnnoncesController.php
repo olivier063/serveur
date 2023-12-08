@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 class AnnoncesController extends Controller
 {
+    private string $string;
     /**
      * Display a listing of the resource.
      *
@@ -47,7 +48,7 @@ class AnnoncesController extends Controller
         // le withCount permet de jointer la fonction myLikeAnnonce du model-Annonce A la table Annonce
         $annonces = Annonces::withCount("myLikeAnnonce")->having("my_like_annonce_count", '>=', 1)
             ->with('myImage')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('my_like_annonce_count', 'desc')
             ->get();
         return response()->json($annonces);
     }
@@ -69,9 +70,11 @@ class AnnoncesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, string $string)
     {
-        //permet de creer les annonces       
+        //permet de creer les annonces  
+
+      
         try {
             $request->validate([
 
@@ -83,8 +86,10 @@ class AnnoncesController extends Controller
             ]);
 
             $data = $request->all();
-            $data['user_id'] = $request->user()->id;
- 
+            if ($request->user()) {
+                $data['user_id'] = $request->user()->id;
+            }
+
            $id = Annonces::create($data)->id;
            Image::create(['annonce_id'=>$id, 'content'=>$request->get('imageBase64')]);
 

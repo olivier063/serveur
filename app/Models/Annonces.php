@@ -11,6 +11,8 @@ class Annonces extends Model
 {
     use HasFactory;
 
+    // const UPDATED_AT = 'nouveauNom';
+
     protected $fillable = ['user_id', 'description', 'titre', 'auteur', 'prix', 'nombre de like', 'image'];
 
 

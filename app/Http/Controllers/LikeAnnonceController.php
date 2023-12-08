@@ -45,8 +45,16 @@ class LikeAnnonceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $user, $annonce)
+    
+    public function store(Request $request, string $user, string $annonce)
     {
+        // $arrays = [
+        //     "key"=>'value',
+        //     "value2"
+        // ];
+        // foreach($arrays as $key=>$value){
+        //     $value;
+        // }
         //securite
         $currentUser = $request->user();
         if ($currentUser->id != $user) {
